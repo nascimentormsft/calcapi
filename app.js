@@ -1,15 +1,24 @@
 'use strict';
 
 const express = require('express');
-const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3003;
 
 app.use(express.json());
 
-// Serve the OpenAPI specification
+// Serve the OpenAPI specification with a dynamic server URL
 app.get('/calcapi.json', (req, res) => {
-  res.sendFile(path.join(__dirname, 'calcapi.json'));
+  const spec = require('./calcapi.json');
+  const servers = [...spec.servers];
+
+  if (process.env.WEBSITE_HOSTNAME) {
+    servers.unshift({
+      url: `https://${process.env.WEBSITE_HOSTNAME}`,
+      description: 'Azure App Service'
+    });
+  }
+
+  res.json({ ...spec, servers });
 });
 
 /**

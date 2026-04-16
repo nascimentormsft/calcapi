@@ -7,10 +7,6 @@
   },
   "servers": [
     {
-      "url": "https://<your-app-name>.azurewebsites.net",
-      "description": "Azure App Service"
-    },
-    {
       "url": "http://localhost:3003",
       "description": "Local development server"
     }
