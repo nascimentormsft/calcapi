@@ -1,0 +1,210 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "CalcAPI",
+    "description": "A simple calculator API that performs addition, subtraction, multiplication and division on integers.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://<your-app-name>.azurewebsites.net",
+      "description": "Azure App Service"
+    },
+    {
+      "url": "http://localhost:3003",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/add": {
+      "get": {
+        "summary": "Add two integers",
+        "operationId": "addIntegers",
+        "parameters": [
+          {
+            "name": "a",
+            "in": "query",
+            "required": true,
+            "description": "First integer operand",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "b",
+            "in": "query",
+            "required": true,
+            "description": "Second integer operand",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful addition",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CalcResult" },
+                "example": { "operation": "add", "a": 3, "b": 5, "result": 8 }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subtract": {
+      "get": {
+        "summary": "Subtract two integers",
+        "operationId": "subtractIntegers",
+        "parameters": [
+          {
+            "name": "a",
+            "in": "query",
+            "required": true,
+            "description": "Minuend",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "b",
+            "in": "query",
+            "required": true,
+            "description": "Subtrahend",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful subtraction",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CalcResult" },
+                "example": { "operation": "subtract", "a": 10, "b": 4, "result": 6 }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/multiply": {
+      "get": {
+        "summary": "Multiply two integers",
+        "operationId": "multiplyIntegers",
+        "parameters": [
+          {
+            "name": "a",
+            "in": "query",
+            "required": true,
+            "description": "First integer factor",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "b",
+            "in": "query",
+            "required": true,
+            "description": "Second integer factor",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful multiplication",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CalcResult" },
+                "example": { "operation": "multiply", "a": 3, "b": 7, "result": 21 }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/divide": {
+      "get": {
+        "summary": "Divide two integers",
+        "operationId": "divideIntegers",
+        "parameters": [
+          {
+            "name": "a",
+            "in": "query",
+            "required": true,
+            "description": "Dividend",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "b",
+            "in": "query",
+            "required": true,
+            "description": "Divisor (must not be zero)",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful division",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CalcResult" },
+                "example": { "operation": "divide", "a": 10, "b": 2, "result": 5 }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input or division by zero",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": { "error": "Division by zero is not allowed." }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CalcResult": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": ["add", "subtract", "multiply", "divide"],
+            "description": "The arithmetic operation performed"
+          },
+          "a": { "type": "integer", "description": "First operand" },
+          "b": { "type": "integer", "description": "Second operand" },
+          "result": { "type": "number", "description": "Result of the operation" }
+        },
+        "required": ["operation", "a", "b", "result"]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "description": "Error message" }
+        },
+        "required": ["error"]
+      }
+    }
+  }
+}
